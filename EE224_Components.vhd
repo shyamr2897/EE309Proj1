@@ -21,6 +21,10 @@ package EE224_Components is
 		port (a,b: in std_logic; c: out std_logic);
 	end component;
 
+    component NANDTwo is
+        port (a, b: in std_logic; c: out std_logic);
+    end component;
+
 	component FullAdder is
 		port (x, y, ci: in std_logic; s, co: out std_logic);
 	end component;
@@ -62,8 +66,12 @@ package EE224_Components is
     component SixteenBitAdder is
         port(x,y: in std_logic_vector (15 downto 0);
             s: out std_logic_vector(15 downto 0);
-            c_out: out std_logic_vector(0 downto 0));
+            c_out: out std_logic);
     end component;
 
+    component SixteenBitNand is
+        port(x,y: in std_logic_vector (15 downto 0);
+            s: out std_logic_vector(15 downto 0));
+    end component;
 end EE224_Components;
 

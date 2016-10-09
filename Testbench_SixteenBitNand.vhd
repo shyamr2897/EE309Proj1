@@ -3,19 +3,18 @@ use ieee.std_logic_1164.all;
 library std;
 use std.textio.all;
 
-entity Testbench_SixteenBitAdder is
+entity Testbench_SixteenBitNand is
 end entity;
-architecture Behave of Testbench_SixteenBitAdder is
-component SixteenBitAdder is
+architecture Behave of Testbench_SixteenBitNand is
+component SixteenBitNand is
 port(x : in std_logic_vector(15 downto 0);
 y : in std_logic_vector(15 downto 0);
-s : out std_logic_vector(15 downto 0);
-c_out : out std_logic);
+s : out std_logic_vector(15 downto 0));
 end component;
 
 signal i1,i2 : std_logic_vector(15 downto 0);
 signal o1 : std_logic_vector(15 downto 0);
-signal oc: std_logic;
+
 function to_std_logic(z: bit) return std_logic is
 variable ret_val: std_logic;
 begin
@@ -38,7 +37,7 @@ end to_string;
 begin
 process
 variable err_flag : boolean := false;
-File INFILE: text open read_mode is "SixteenBitAdder.txt";
+File INFILE: text open read_mode is "SixteenBitNand.txt";
 FILE OUTFILE: text  open write_mode is "OUTPUTS.txt";
 
 ---------------------------------------------------
@@ -46,7 +45,6 @@ FILE OUTFILE: text  open write_mode is "OUTPUTS.txt";
 variable input_vector1: bit_vector ( 15 downto 0);
 variable input_vector2: bit_vector ( 15 downto 0);
 variable output_vector: bit_vector ( 15 downto 0);
-variable output_carry: bit;
 ----------------------------------------------------
 variable INPUT_LINE: Line;
 variable OUTPUT_LINE: Line;
@@ -61,7 +59,6 @@ readLine (INFILE, INPUT_LINE);
 read (INPUT_LINE, input_vector1);
 read (INPUT_LINE, input_vector2);
 read (INPUT_LINE, output_vector);
-read (INPUT_LINE, output_carry);
 
 --------------------------------------
 -- from input-vector to DUT inputs
@@ -74,7 +71,7 @@ wait for 5 ns;
 
 --------------------------------------
 -- check outputs.
-if (o1 /= to_stdlogicvector(output_vector) or oc /= to_std_logic(output_carry)) then
+if (o1 /= to_stdlogicvector(output_vector)) then
 write(OUTPUT_LINE,to_string("ERROR: in c1, line "));
 write(OUTPUT_LINE, LINE_COUNT);
 writeline(OUTFILE, OUTPUT_LINE);
@@ -89,7 +86,7 @@ assert (not err_flag) report "FAILURE, some tests failed." severity error;
 wait;
 end process;
 
-dut: SixteenBitAdder
-port map(x => i1, y => i2, s => o1, c_out => oc);
+dut: SixteenBitNand
+port map(x => i1, y => i2, s => o1);
 
 end Behave;

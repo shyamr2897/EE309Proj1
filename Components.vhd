@@ -93,7 +93,7 @@ end entity;
 architecture Struct of TwosComplement is
 signal i: std_logic_vector (15 downto 0);
 signal o: std_logic_vector (15 downto 0) := "0000000000000001";
-signal c: std_logic_vector (0 downto 0);
+signal c: std_logic;
 begin
 n0: INVERTER port map (a => x(0), b => i(0));
 n1: INVERTER port map (a => x(1), b => i(1));
@@ -161,10 +161,22 @@ begin
 end Struct;
 
 -----------------------------------------------------------------------------
-	
+--Two input NAND gate
+library ieee;
+use ieee.std_logic_1164.all;
 
+library work;
+use work.EE224_Components.all;
 
+entity NANDTwo is
+    port (a, b: in std_logic;
+        c: out std_logic);
+end entity;
 
-	
-
+architecture Struct of NANDTwo is
+    signal t1: std_logic;
+begin
+    a1: ANDTwo port map(a => a, b => b, c => t1);
+    n1: INVERTER port map (a => t1, b => c);
+end Struct;
 
