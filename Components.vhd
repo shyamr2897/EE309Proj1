@@ -85,12 +85,12 @@ use ieee.std_logic_1164.all;
 library work;
 use work.EE224_Components.all;
 
-entity TwosComplement is
+entity TwosComplementSixteen is
 port (x: in std_logic_vector (15 downto 0);
 t: out std_logic_vector (15 downto 0));
 end entity;
 
-architecture Struct of TwosComplement is
+architecture Struct of TwosComplementSixteen is
 signal i: std_logic_vector (15 downto 0);
 signal o: std_logic_vector (15 downto 0) := "0000000000000001";
 signal c: std_logic;

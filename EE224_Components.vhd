@@ -44,6 +44,11 @@ package EE224_Components is
 		  	t: out std_logic_vector (7 downto 0));
 	end component;
 
+    component TwosComplementSixteen is
+        port (x: in std_logic_vector (15 downto 0);
+            t: out std_logic_vector (15 downto 0));
+    end component;
+
 	component Multiplexer is
 		port(a, b, s: in std_logic; c: out std_logic);
 	end component;
