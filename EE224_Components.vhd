@@ -79,5 +79,16 @@ package EE224_Components is
             s: out std_logic_vector(2 downto 0);
             N: out std_logic);
     end component;
-end EE224_Components;
+
+    component SixBitSignExtender is
+        port(x: in std_logic_vector (5 downto 0);
+            y: out std_logic_vector (15 downto 0));
+    end component;
+
+    component TenBitSignExtender is
+        port(x: in std_logic_vector (9 downto 0);
+            y: out std_logic_vector (15 downto 0));
+    end component;
+
+    end EE224_Components;
 
