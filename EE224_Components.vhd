@@ -73,5 +73,11 @@ package EE224_Components is
         port(x,y: in std_logic_vector (15 downto 0);
             s: out std_logic_vector(15 downto 0));
     end component;
+
+    component PriorityEncoder is
+        port(x: in std_logic_vector (7 downto 0);
+            s: out std_logic_vector(2 downto 0);
+            N: out std_logic);
+    end component;
 end EE224_Components;
 
