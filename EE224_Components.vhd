@@ -95,5 +95,12 @@ package EE224_Components is
             y: out std_logic_vector (15 downto 0));
     end component;
 
+    component DataRegister is
+        generic (data_width:integer);
+        port (Din: in std_logic_vector(data_width-1 downto 0);
+            Dout: out std_logic_vector(data_width-1 downto 0);
+            clk, enable: in std_logic);
+    end component DataRegister;
+
     end EE224_Components;
 
