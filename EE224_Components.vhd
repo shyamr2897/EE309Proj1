@@ -139,5 +139,14 @@ package EE224_Components is
             s: out std_logic_vector(15 downto 0);
             c_out,z_out: out std_logic);
     end component;
+
+    component RF is
+        port(RF_write, PC_write: in std_logic;
+            A1,A2,A3: in std_logic_vector (2 downto 0);
+            D3,PC_in: in std_logic_vector(15 downto 0);
+            D1,D2,PC_out: out std_logic_vector(15 downto 0);
+            rst, clk: in std_logic);
+    end component;
+
     end EE224_Components;
 
