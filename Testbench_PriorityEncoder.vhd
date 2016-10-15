@@ -9,12 +9,14 @@ architecture Behave of Testbench_PriorityEncoder is
 component PriorityEncoder is
 port(x: in std_logic_vector (7 downto 0);
 s: out std_logic_vector(2 downto 0);
-N: out std_logic);
+N: out std_logic;
+tnew: out std_logic_vector (7 downto 0));
 end component;
 
 signal i1 : std_logic_vector(7 downto 0);
 signal o1 : std_logic_vector(2 downto 0);
 signal o2 : std_logic;
+signal o3 : std_logic_vector(7 downto 0);
 function to_std_logic(z: bit) return std_logic is
 variable ret_val: std_logic;
 begin
@@ -45,6 +47,7 @@ FILE OUTFILE: text  open write_mode is "OUTPUTS.txt";
 variable input_vector1: bit_vector ( 7 downto 0);
 variable output_vector1: bit_vector ( 2 downto 0);
 variable output2: bit;
+variable output_vector3: bit_vector (7 downto 0);
 ----------------------------------------------------
 variable INPUT_LINE: Line;
 variable OUTPUT_LINE: Line;
@@ -59,6 +62,7 @@ readLine (INFILE, INPUT_LINE);
 read (INPUT_LINE, input_vector1);
 read (INPUT_LINE, output_vector1);
 read (INPUT_LINE, output2);
+read (INPUT_LINE, output_vector3);
 
 --------------------------------------
 -- from input-vector to DUT inputs
@@ -70,7 +74,7 @@ wait for 5 ns;
 
 --------------------------------------
 -- check outputs.
-if (o1 /= to_stdlogicvector(output_vector1) or o2 /= to_std_logic(output2)) then
+if (o1 /= to_stdlogicvector(output_vector1) or o2 /= to_std_logic(output2) or o3 /= to_stdlogicvector(output_vector3)) then
 write(OUTPUT_LINE,to_string("ERROR: in c1, line "));
 write(OUTPUT_LINE, LINE_COUNT);
 writeline(OUTFILE, OUTPUT_LINE);
@@ -86,6 +90,6 @@ wait;
 end process;
 
 dut: PriorityEncoder
-port map(x => i1, s => o1, N => o2);
+port map(x => i1, s => o1, N => o2, tnew => o3);
 
 end Behave;

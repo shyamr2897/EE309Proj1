@@ -82,7 +82,14 @@ package EE224_Components is
     component PriorityEncoder is
         port(x: in std_logic_vector (7 downto 0);
             s: out std_logic_vector(2 downto 0);
-            N: out std_logic);
+            N: out std_logic;
+            tnew: out std_logic_vector (7 downto 0));
+    end component;
+
+    component PriorityDecoder is
+        port(x: in std_logic_vector (7 downto 0);
+            s: in std_logic_vector(2 downto 0);
+            y: out std_logic_vector(7 downto 0));
     end component;
 
     component SixBitSignExtender is
@@ -101,6 +108,12 @@ package EE224_Components is
             Dout: out std_logic_vector(data_width-1 downto 0);
             clk, enable: in std_logic);
     end component DataRegister;
+
+    component out_Mux is
+        port(r0, r1, r2, r3, r4, r5, r6, r7: in std_logic_vector(15 downto 0);
+            a: in std_logic_vector(2 downto 0);
+            o: out std_logic_vector(15 downto 0));
+    end component;
 
     end EE224_Components;
 

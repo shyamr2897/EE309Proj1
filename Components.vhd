@@ -203,4 +203,59 @@ begin
         end if;
     end process;
 end Behave;
+-----------------------------------------------------------------------------
+--RF_outMUX
+library ieee;
+use ieee.std_logic_1164.all;
 
+library work;
+use work.EE224_Components.all;
+
+entity out_Mux is
+    port(r0, r1, r2, r3, r4, r5, r6, r7: in std_logic_vector(15 downto 0);
+        a: in std_logic_vector(2 downto 0);
+        o: out std_logic_vector(15 downto 0));
+end entity;
+architecture Behave of out_Mux is
+begin
+    process(a,r0,r1,r2,r3,r4,r5,r6,r7)
+    begin
+        if(a = "000") then o <= r0;
+        elsif(a = "001") then o <= r1;
+        elsif(a = "010") then o <= r2;
+        elsif(a = "011") then o <= r3;
+        elsif(a = "100") then o <= r4;
+        elsif(a = "101") then o <= r5;
+        elsif(a = "110") then o <= r6;
+        elsif(a = "111") then o <= r7;
+        else o <= "XXXXXXXXXXXXXXXX";
+        end if;
+    end process;
+end Behave;
+
+-------------------------------------------------------------------------------
+--Priority Decoder
+
+library ieee;
+use ieee.std_logic_1164.all;
+
+library work;
+use work.EE224_Components.all;
+
+entity PriorityDecoder is
+    port(x: in std_logic_vector (7 downto 0);
+        s: in std_logic_vector(2 downto 0);
+        y: out std_logic_vector(7 downto 0));
+end entity;
+
+architecture Behave of PriorityDecoder is
+begin
+    y(0) <= x(0) and (not(not s(2) and not s(1) and not s(0)));
+    y(1) <= x(1) and (not(not s(2) and not s(1) and s(0)));
+    y(2) <= x(2) and (not(not s(2) and s(1) and not s(0)));
+    y(3) <= x(3) and (not(not s(2) and s(1) and s(0)));
+    y(4) <= x(4) and (not( s(2) and not s(1) and not s(0)));
+    y(5) <= x(5) and (not( s(2) and not s(1) and s(0)));
+    y(6) <= x(6) and (not( s(2) and s(1) and not s(0)));
+    y(7) <= x(7) and (not( s(2) and s(1) and s(0)));
+end Behave;
