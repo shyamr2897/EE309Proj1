@@ -160,6 +160,136 @@ begin
 	m3: Multiplexer port map (a => t1, b => t2, s => s(1), c => o);
 end Struct;
 
+-------------------------------------------------------------------------------
+--
+library ieee;
+use ieee.std_logic_1164.all;
+
+library work;
+use work.EE224_Components.all;
+
+entity EightBitAdder is
+	port(x,y: in std_logic_vector (7 downto 0);
+		s: out std_logic_vector(7 downto 0));
+end entity;
+
+architecture Struct of EightBitAdder is
+	signal m: std_logic := '0';
+	signal c: std_logic_vector (7 downto 0);
+begin
+	f0: FullAdder port map (x => x(0), y => y(0), ci => m, s => s(0), co => c(0));
+	f1: FullAdder port map (x => x(1), y => y(1), ci => c(0), s => s(1), co => c(1));
+	f2: FullAdder port map (x => x(2), y => y(2), ci => c(1), s => s(2), co => c(2));
+	f3: FullAdder port map (x => x(3), y => y(3), ci => c(2), s => s(3), co => c(3));
+	f4: FullAdder port map (x => x(4), y => y(4), ci => c(3), s => s(4), co => c(4));
+	f5: FullAdder port map (x => x(5), y => y(5), ci => c(4), s => s(5), co => c(5));
+	f6: FullAdder port map (x => x(6), y => y(6), ci => c(5), s => s(6), co => c(6));
+	f7: FullAdder port map (x => x(7), y => y(7), ci => c(6), s => s(7), co => c(7));
+end Struct;
+
+-------------------------------------------------------------------------------
+--Eight Bit Subtractor
+
+library ieee;
+use ieee.std_logic_1164.all;
+
+library work;
+use work.EE224_Components.all;
+
+entity EightBitSubtractor is
+	port(x,y: in std_logic_vector (7 downto 0);
+		s: out std_logic_vector(7 downto 0));
+end entity;
+
+architecture Struct of EightBitSubtractor is
+	signal t: std_logic_vector (7 downto 0);
+begin
+	t0: TwosComplement port map (x => y, t => t);
+
+	e1: EightBitAdder port map (x => x, y => t, s => s);
+end Struct;
+-----------------------------------------------------------------------------
+--Eight Bit Left Shift
+library ieee;
+use ieee.std_logic_1164.all;
+
+library work;
+use work.EE224_Components.all;
+
+entity ShiftLeft is
+	port (x,y: in std_logic_vector (7 downto 0);
+	r: out std_logic_vector (7 downto 0));
+end entity ShiftLeft;
+
+architecture Struct of ShiftLeft is
+	signal k, l: std_logic_vector (7 downto 0);
+	signal m: std_logic := '0';
+begin
+	m00: Multiplexer port map (a => x(0), b => m, s => y(0), c => k(0));
+	m01: Multiplexer port map (a => x(1), b => x(0), s => y(0), c => k(1));
+	m02: Multiplexer port map (a => x(2), b => x(1), s => y(0), c => k(2));
+	m03: Multiplexer port map (a => x(3), b => x(2), s => y(0), c => k(3));
+	m04: Multiplexer port map (a => x(4), b => x(3), s => y(0), c => k(4));
+	m05: Multiplexer port map (a => x(5), b => x(4), s => y(0), c => k(5));
+	m06: Multiplexer port map (a => x(6), b => x(5), s => y(0), c => k(6));
+	m07: Multiplexer port map (a => x(7), b => x(6), s => y(0), c => k(7));
+
+	m10: Multiplexer port map (a => k(0), b => m, s => y(1), c => l(0));
+	m11: Multiplexer port map (a => k(1), b => m, s => y(1), c => l(1));
+	m12: Multiplexer port map (a => k(2), b => k(0), s => y(1), c => l(2));
+	m13: Multiplexer port map (a => k(3), b => k(1), s => y(1), c => l(3));
+	m14: Multiplexer port map (a => k(4), b => k(2), s => y(1), c => l(4));
+	m15: Multiplexer port map (a => k(5), b => k(3), s => y(1), c => l(5));
+	m16: Multiplexer port map (a => k(6), b => k(4), s => y(1), c => l(6));
+	m17: Multiplexer port map (a => k(7), b => k(5), s => y(1), c => l(7));
+
+	m20: Multiplexer port map (a => l(0), b => m, s => y(2), c => r(0));
+	m21: Multiplexer port map (a => l(1), b => m, s => y(2), c => r(1));
+	m22: Multiplexer port map (a => l(2), b => m, s => y(2), c => r(2));
+	m23: Multiplexer port map (a => l(3), b => m, s => y(2), c => r(3));
+	m24: Multiplexer port map (a => l(4), b => l(0), s => y(2), c => r(4));
+	m25: Multiplexer port map (a => l(5), b => l(1), s => y(2), c => r(5));
+	m26: Multiplexer port map (a => l(6), b => l(2), s => y(2), c => r(6));
+	m27: Multiplexer port map (a => l(7), b => l(3), s => y(2), c => r(7));	
+end Struct;
+
+-----------------------------------------------------------------------------
+--Eight Bit Right Shift
+library ieee;
+use ieee.std_logic_1164.all;
+
+library work;
+use work.EE224_Components.all;
+
+entity ShiftRight is
+	port (x,y: in std_logic_vector (7 downto 0);
+		r: out std_logic_vector (7 downto 0));
+end entity;
+
+architecture Struct of ShiftRight is
+	signal p, q: std_logic_vector (7 downto 0);
+begin
+	p(0)<=x(7);
+	p(1)<=x(6);
+	p(2)<=x(5);
+	p(3)<=x(4);
+	p(4)<=x(3);
+	p(5)<=x(2);
+	p(6)<=x(1);
+	p(7)<=x(0);
+
+	sl: ShiftLeft port map (x=>p, y=>y, r=>q);
+
+	r(0)<=q(7);
+	r(1)<=q(6);
+	r(2)<=q(5);
+	r(3)<=q(4);
+	r(4)<=q(3);
+	r(5)<=q(2);
+	r(6)<=q(1);
+	r(7)<=q(0);
+end Struct;
+
 -----------------------------------------------------------------------------
 --Two input NAND gate
 library ieee;
