@@ -160,6 +160,51 @@ begin
 	m3: Multiplexer port map (a => t1, b => t2, s => s(1), c => o);
 end Struct;
 
+----------------------------------------------------------------------------
+-- 2:1 Multiplexer for 16 bit Vector
+library ieee;
+use ieee.std_logic_1164.all;
+
+library work;
+use work.EE224_Components.all;
+
+entity MuxTwo is
+	port(i0, i1: in std_logic_vector (15 downto 0);
+        s: in std_logic;
+        o: out std_logic_vector(15 downto 0));
+end entity;
+
+architecture Struct of MuxTwo is
+begin
+	o <= i0 when s = '0' else
+        i1 when s = '1' else
+        i0;
+end Struct;
+
+-----------------------------------------------------------------------------
+--4:1 Multiplexer for 16 bit Vector
+library ieee;
+use ieee.std_logic_1164.all;
+
+library work;
+use work.EE224_Components.all;
+
+entity MuxFour is
+	port (i00, i01, i10, i11: in std_logic_vector(15 downto 0);
+        s: in std_logic_vector (1 downto 0);
+		o: out std_logic_vector (15 downto 0));
+end entity;
+
+architecture Struct of MuxFour is
+begin
+	o <= i00 when s = "00" else
+        i01 when s = "01" else
+        i10 when s = "10" else
+        i11 when s = "11" else
+        i00;
+
+end Struct;
+
 -------------------------------------------------------------------------------
 --
 library ieee;

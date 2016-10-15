@@ -74,6 +74,12 @@ package EE224_Components is
             c_out: out std_logic);
     end component;
 
+    component SixteenBitSubtractor is
+        port(x,y: in std_logic_vector (15 downto 0);
+            s: out std_logic_vector(15 downto 0);
+            b: out std_logic);
+    end component;
+
     component SixteenBitNand is
         port(x,y: in std_logic_vector (15 downto 0);
             s: out std_logic_vector(15 downto 0));
@@ -115,5 +121,23 @@ package EE224_Components is
             o: out std_logic_vector(15 downto 0));
     end component;
 
+    component MuxTwo is
+        port(i0, i1: in std_logic_vector (15 downto 0);
+            s: in std_logic;
+            o: out std_logic_vector(15 downto 0));
+    end component;
+
+    component MuxFour is
+        port (i00, i01, i10, i11: in std_logic_vector(15 downto 0);
+            s: in std_logic_vector (1 downto 0);
+            o: out std_logic_vector (15 downto 0));
+    end component;
+
+    component ALU is
+        port(x,y: in std_logic_vector (15 downto 0);
+            op: in std_logic_vector (1 downto 0);
+            s: out std_logic_vector(15 downto 0);
+            c_out,z_out: out std_logic);
+    end component;
     end EE224_Components;
 
