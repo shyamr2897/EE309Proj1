@@ -13,7 +13,7 @@ architecture Struct of NineBitSignExtender is
 signal m: std_logic;
 begin
 m <= x(8);
-y(8 downto 0) <= x(9 downto 0);
+y(8 downto 0) <= x(8 downto 0);
 y(9) <= m;
 y(10) <= m;
 y(11) <= m;
