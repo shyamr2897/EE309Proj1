@@ -4,16 +4,17 @@ use ieee.std_logic_1164.all;
 library work;
 use work.EE224_Components.all;
 
-entity TenBitSignExtender is
-    port(x: in std_logic_vector (9 downto 0);
+entity NineBitSignExtender is
+    port(x: in std_logic_vector (8 downto 0);
         y: out std_logic_vector (15 downto 0));
 end entity;
 
-architecture Struct of TenBitSignExtender is
+architecture Struct of NineBitSignExtender is
 signal m: std_logic;
 begin
-m <= x(9);
-y(9 downto 0) <= x(9 downto 0);
+m <= x(8);
+y(8 downto 0) <= x(9 downto 0);
+y(9) <= m;
 y(10) <= m;
 y(11) <= m;
 y(12) <= m;

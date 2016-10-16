@@ -103,8 +103,8 @@ package EE224_Components is
             y: out std_logic_vector (15 downto 0));
     end component;
 
-    component TenBitSignExtender is
-        port(x: in std_logic_vector (9 downto 0);
+    component NineBitSignExtender is
+        port(x: in std_logic_vector (8 downto 0);
             y: out std_logic_vector (15 downto 0));
     end component;
 
@@ -146,6 +146,19 @@ package EE224_Components is
             D3,PC_in: in std_logic_vector(15 downto 0);
             D1,D2,PC_out: out std_logic_vector(15 downto 0);
             rst, clk: in std_logic);
+    end component;
+
+    component EnableDecoder is
+        port(lsb_ad_int, msb_ad_int: in integer;
+            b: in integer; Mem_write: in std_logic;
+            byte_enable: out std_logic);
+    end component;
+
+    component Memory is
+        port(Mem_write, Mem_read: in std_logic;
+            Mem_ad, Mem_dat: in std_logic_vector (15 downto 0);
+            edb: out std_logic_vector(15 downto 0);
+            clk,rst: in std_logic);
     end component;
 
     end EE224_Components;
