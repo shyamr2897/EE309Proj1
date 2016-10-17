@@ -436,24 +436,5 @@ begin
 end Behave;
 
 -------------------------------------------------------------------------------
---Memory Enable Decoder
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
-
-library work;
-use work.EE224_Components.all;
-
-entity EnableDecoder is
-    port(lsb_ad_int, msb_ad_int: in integer;
-        b: in integer; Mem_write: in std_logic;
-        byte_enable: out std_logic);
-end entity;
-
-architecture Behave of EnableDecoder is
-begin
-    byte_enable <= '1' when Mem_write = '1' and ( b = lsb_ad_int or
-                                b = msb_ad_int )  else
-                    '0';
-end Behave;
+--
 

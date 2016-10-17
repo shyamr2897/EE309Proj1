@@ -148,12 +148,6 @@ package EE224_Components is
             rst, clk: in std_logic);
     end component;
 
-    component EnableDecoder is
-        port(lsb_ad_int, msb_ad_int: in integer;
-            b: in integer; Mem_write: in std_logic;
-            byte_enable: out std_logic);
-    end component;
-
     component Memory is
         port(Mem_write, Mem_read: in std_logic;
             Mem_ad, Mem_dat: in std_logic_vector (15 downto 0);
