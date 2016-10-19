@@ -155,5 +155,15 @@ package EE224_Components is
             clk,rst: in std_logic);
     end component;
 
+    component Comparator is
+        port(x,y: in std_logic_vector (15 downto 0);
+        z_out: out std_logic);
+    end component;
+
+    component ZeroComparator is
+        port(x: in std_logic_vector (15 downto 0);
+        z_out: out std_logic);
+    end component;
+
     end EE224_Components;
 
