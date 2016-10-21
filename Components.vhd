@@ -205,6 +205,34 @@ begin
 
 end Struct;
 
+-----------------------------------------------------------------------------
+--8:1 Multiplexer for 16 bit Vector
+library ieee;
+use ieee.std_logic_1164.all;
+
+library work;
+use work.EE224_Components.all;
+
+entity MuxEight is
+	port (i000, i001, i010, i011, i100, i101, i110, i111: in std_logic_vector(15 downto 0);
+        s: in std_logic_vector (2 downto 0);
+		o: out std_logic_vector (15 downto 0));
+end entity;
+
+architecture Struct of MuxEight is
+begin
+	o <= i000 when s = "000" else
+        i001 when s = "001" else
+        i010 when s = "010" else
+        i011 when s = "011" else
+        i100 when s = "100" else
+        i101 when s = "101" else
+        i110 when s = "110" else
+        i111 when s = "111" else
+        i000;
+
+end Struct;
+
 -------------------------------------------------------------------------------
 --
 library ieee;
@@ -455,7 +483,7 @@ begin
             '0';
 end Behave;
 -------------------------------------------------------------------------------
---Comparator
+--Zero Comparator
 library ieee;
 use ieee.std_logic_1164.all;
 
@@ -548,5 +576,3 @@ architecture Struct of PadNine is
 begin
 y <= x & "0000000";
 end Struct;
-
-

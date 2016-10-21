@@ -22,7 +22,7 @@ begin
 
     edb <= mem_byte(to_integer(unsigned(ad_of_msb))) &
                         mem_byte(to_integer(unsigned(ad_of_lsb))) when Mem_read = '1' else
-            "XXXXXXXXXXXXXXXX";
+            "1111111111111111";
             
     process(clk)
     begin
