@@ -174,13 +174,26 @@ package EE224_Components is
     component ControlPath is
         port (
             mem_ad_a, mem_ad_b, alu1_a, alu1_b, alu1_c, alu2_a, alu2_b, alu2_c,
-            pc_a, pc_b, d1_a, a2_a, t1_a, t5_a, t6_a, a3_a, a3_b, d3_a, d3_b,
+            pc_a, pc_b, a2_a, t1_a, t5_a, t6_a, a3_a, a3_b, d3_a, d3_b,
                                                         mem_d_a, pad9_a: out std_logic;
             c,z,z_temp,comp_temp: in std_logic;
             pcw, irw, memr, memw, rfw, t5e, t6e, t3e, c_en, z_en, z_temp_en, comp_temp_en,
             alu_op: out std_logic;
             instr: in std_logic_vector (15 downto 0);
-            clk, reset: in std_logic
+            clk, rst: in std_logic
+             );
+    end component;
+
+    component DataPath is
+        port (
+            mem_ad_a, mem_ad_b, alu1_a, alu1_b, alu1_c, alu2_a, alu2_b, alu2_c,
+            pc_a, pc_b, a2_a, t1_a, t5_a, t6_a, a3_a, a3_b, d3_a, d3_b,
+                                                        mem_d_a, pad9_a: in std_logic;
+            c,z,z_temp,comp_temp: out std_logic;
+            pcw, irw, memr, memw, rfw, t5e, t6e, t3e, c_en, z_en, z_temp_en, comp_temp_en,
+            alu_op,frce,flg: in std_logic;
+            instr: out std_logic_vector (15 downto 0);
+            clk, rst: in std_logic
              );
     end component;
 

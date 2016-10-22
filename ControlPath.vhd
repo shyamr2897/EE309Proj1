@@ -7,7 +7,7 @@ use work.EE224_Components.all;
 entity ControlPath is
 	port (
 		mem_ad_a, mem_ad_b, alu1_a, alu1_b, alu1_c, alu2_a, alu2_b, alu2_c,
-        pc_a, pc_b, d1_a, a2_a, t1_a, t5_a, t6_a, a3_a, a3_b, d3_a, d3_b,
+        pc_a, pc_b, a2_a, t1_a, t5_a, t6_a, a3_a, a3_b, d3_a, d3_b,
                                                     mem_d_a, pad9_a: out std_logic;
 		c,z,z_temp,comp_temp: in std_logic;
         pcw, irw, memr, memw, rfw, t5e, t6e, t3e, c_en, z_en, z_temp_en, comp_temp_en,
@@ -24,7 +24,8 @@ begin
 
    process(fsm_state, c,z,z_temp,comp_temp,instr, clk, rst)
       variable next_state: FsmState;
-      variable x_mem_ad_a, x_mem_ad_b, x_alu1_a, x_alu1_b, x_alu1_c, x_d1_a, x_alu2_a, x_alu2_b, x_alu2_c,
+      variable x_mem_ad_a, x_mem_ad_b, x_alu1_a, x_alu1_b, x_alu1_c, x_alu2_a, x_alu2_b,
+      x_alu2_c,
         x_pc_a, x_pc_b, x_a2_a, x_t1_a, x_t5_a, x_t6_a, x_a3_a, x_a3_b, x_d3_a, x_d3_b,
                     x_mem_d_a, x_pad9_a: std_logic;
         variable x_pcw, x_irw, x_memr, x_memw, x_rfw, x_t5e, x_t6e, x_t3e, x_c_en, x_z_en,
@@ -34,8 +35,9 @@ begin
        -- defaults
        next_state := fsm_state;
 
-        x_mem_ad_a:= '0'; x_mem_ad_b:= '0'; x_alu1_a:= '0'; x_alu1_b:= '0'; x_alu1_c:= '0'; x_alu2_a:= '0';
-        x_alu2_b:= '0'; x_alu2_c:= '0'; x_pc_a:= '0'; x_pc_b:= '0'; x_d1_a := '0'; x_a2_a:= '0'; x_t1_a:= '0';
+        x_mem_ad_a:= '0'; x_mem_ad_b:= '0'; x_alu1_a:= '0'; x_alu1_b:= '0'; x_alu1_c:= '0';
+        x_alu2_a:= '0';
+        x_alu2_b:= '0'; x_alu2_c:= '0'; x_pc_a:= '0'; x_pc_b:= '0'; x_a2_a:= '0'; x_t1_a:= '0';
         x_t5_a:= '0'; x_t6_a:= '0'; x_a3_a:= '0'; x_a3_b:= '0'; x_d3_a:= '0'; x_d3_b:= '0';
                     x_mem_d_a:= '0'; x_pad9_a := '0';
 
@@ -71,7 +73,7 @@ begin
                 x_flg := '1';
                 
           when S2 =>
-                x_d1_a := '0';   -- D1 -> T1
+                x_t1_a := '0';   -- D1 -> T1
                 x_a2_a := '0';      -- I8-6 ->A2
 
                 x_alu1_c:= '0';
@@ -97,10 +99,10 @@ begin
 
                 x_alu_op := '0';       --add
 
-               if(instr(15 downto 12) = "0000" or instr(15 downto 12) = "0010") then      --R-type
+            if(instr(15 downto 12) = "0000" or instr(15 downto 12) = "0010") then      --R-type
 
                     if( ( instr(1 downto 0) = "00" ) or ( c = '1' and instr(1) = '1' )
-                                                            or ( z = '1' and instr(0) = '1' ) ) then
+                                                        or ( z = '1' and instr(0) = '1' ) ) then
                         next_state := S3;
                     else
                         next_state := S1;
@@ -125,7 +127,7 @@ begin
                     x_alu2_b := '1';
                     x_alu2_a := '0';  -- SE6 -> alu2
 
-                elsif(instr(15 downto 13) = "100")    then                              -- JAL/JLR
+                elsif(instr(15 downto 13) = "100")    then                           -- JAL/JLR
                     next_state := S11;
 
                     x_alu2_c := '0';
@@ -167,7 +169,7 @@ begin
             x_alu2_b := '1';
             x_alu2_a := '0';  -- SE6 -> alu2
 
-            x_d1_a := '0';   -- D1->t1
+            x_t1_a := '0';   -- D1->t1
 
             x_alu_op := '0';       --add
 
@@ -332,9 +334,11 @@ begin
 
      end case;
 
-    mem_ad_a <= x_mem_ad_a; mem_ad_b <= x_mem_ad_b; alu1_a <= x_alu1_a; alu1_b <= x_alu1_b; alu1_c <= x_alu1_c;
-    d1_a <= x_d1_a ;alu2_a <= x_alu2_a; alu2_b <= x_alu2_b; alu2_c <= x_alu2_c; pc_a <= x_pc_a;
-     pc_b <= x_pc_b; a2_a <= x_a2_a; t1_a <= x_t1_a; t5_a <= x_t5_a; t6_a <= x_t6_a; a3_a <= x_a3_a;
+    mem_ad_a <= x_mem_ad_a; mem_ad_b <= x_mem_ad_b; alu1_a <= x_alu1_a; alu1_b <= x_alu1_b;
+    alu1_c <= x_alu1_c;
+    alu2_a <= x_alu2_a; alu2_b <= x_alu2_b; alu2_c <= x_alu2_c; pc_a <= x_pc_a;
+     pc_b <= x_pc_b; a2_a <= x_a2_a; t1_a <= x_t1_a; t5_a <= x_t5_a; t6_a <= x_t6_a;
+     a3_a <= x_a3_a;
     a3_b <= x_a3_b; d3_a <= x_d3_a; d3_b <= x_d3_b; mem_d_a <= x_mem_d_a; pad9_a <= x_pad9_a;
 
     pcw <= x_pcw; memr <= x_memr; memw <= x_memw; rfw <= x_rfw; t5e <= x_t5e; t6e <= x_t6e;

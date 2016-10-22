@@ -48,8 +48,8 @@ begin
     ----------------------
     --R0 related logic
     ----------------------
-    R_in(0) <= D3;
-    R_enable(0) <= RF_write and ( not(A3(2)) and not(A3(1)) and not(A3(0)) );
+    R_in(0) <= "0000000000000000" when rst = '1' else D3;
+    R_enable(0) <= (RF_write and ( not(A3(2)) and not(A3(1)) and not(A3(0)) )) or rst;
     R0: DataRegister
              generic map (data_width => 16)
              port map (
@@ -59,8 +59,8 @@ begin
      ----------------------
     --R1 related logic
     ----------------------
-    R_in(1) <= D3;
-    R_enable(1) <= RF_write and ( not(A3(2)) and not(A3(1)) and A3(0) );
+    R_in(1) <= "0000000000000000" when rst = '1' else D3;
+    R_enable(1) <= (RF_write and ( not(A3(2)) and not(A3(1)) and A3(0) )) or rst;
     R1: DataRegister
              generic map (data_width => 16)
              port map (
@@ -71,8 +71,8 @@ begin
     ----------------------
     --R2 related logic
     ----------------------
-    R_in(2) <= D3;
-    R_enable(2) <= RF_write and ( not(A3(2)) and A3(1) and not(A3(0)) );
+    R_in(2) <= "0000000000000000" when rst = '1' else D3;
+    R_enable(2) <= (RF_write and ( not(A3(2)) and A3(1) and not(A3(0)) )) or rst;
     R2: DataRegister
              generic map (data_width => 16)
              port map (
@@ -82,8 +82,8 @@ begin
     ----------------------
     --R3 related logic
     ----------------------
-    R_in(3) <= D3;
-    R_enable(3) <= RF_write and ( not(A3(2)) and A3(1) and A3(0) );
+    R_in(3) <= "0000000000000000" when rst = '1' else D3;
+    R_enable(3) <= (RF_write and ( not(A3(2)) and A3(1) and A3(0) )) or rst;
     R3: DataRegister
              generic map (data_width => 16)
              port map (
@@ -93,8 +93,8 @@ begin
     ----------------------
     --R4 related logic
     ----------------------
-    R_in(4) <= D3;
-    R_enable(4) <= RF_write and ( A3(2) and not(A3(1)) and not(A3(0)) );
+    R_in(4) <= "0000000000000000" when rst = '1' else D3;
+    R_enable(4) <= (RF_write and ( A3(2) and not(A3(1)) and not(A3(0)) )) or rst;
     R4: DataRegister
              generic map (data_width => 16)
              port map (
@@ -104,8 +104,8 @@ begin
     ----------------------
     --R5 related logic
     ----------------------
-    R_in(5) <= D3;
-    R_enable(5) <= RF_write and ( A3(2) and not(A3(1)) and A3(0) );
+    R_in(5) <= "0000000000000000" when rst = '1' else D3;
+    R_enable(5) <= (RF_write and ( A3(2) and not(A3(1)) and A3(0) )) or rst;
     R5: DataRegister
              generic map (data_width => 16)
              port map (
@@ -115,8 +115,8 @@ begin
     ----------------------
     --R6 related logic
     ----------------------
-    R_in(6) <= D3;
-    R_enable(6) <= RF_write and ( A3(2) and A3(1) and not(A3(0)) );
+    R_in(6) <= "0000000000000000" when rst = '1' else D3;
+    R_enable(6) <= (RF_write and ( A3(2) and A3(1) and not(A3(0)) )) or rst;
     R6: DataRegister
              generic map (data_width => 16)
              port map (
@@ -126,11 +126,12 @@ begin
     ----------------------
     --R7 related logic
     ----------------------
-    R_in(7) <= PC_in when force = '1' else
+    R_in(7) <= "0000000000000000" when rst = '1' else
+                PC_in when force = '1' else
                 PC_out_sig when flag = '1' else
                 D3;
     R_enable(7) <=   (RF_write and ( A3(2) and A3(1) and A3(0))) or force
-                            or (flag and comp);
+                            or (flag and comp) or rst;
     R7: DataRegister
              generic map (data_width => 16)
              port map (
@@ -141,9 +142,10 @@ begin
     --PC related logic
     ----------------------
     PC_out <= PC_out_sig;
-    PC_in_sig <= R_out(7) when flag = '1' else
+    PC_in_sig <= "0000000000000000" when rst = '1' else
+                R_out(7) when flag = '1' else
                 PC_in;
-    pc_en <= PC_write or (flag and not comp);
+    pc_en <= PC_write or (flag and not comp) or force or rst;
     PC: DataRegister
              generic map (data_width => 16)
              port map (

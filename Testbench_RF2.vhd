@@ -49,6 +49,7 @@ clk <= not clk after 5 ns; -- assume 10ns clock.
   process
   begin
      wait until clk = '1';
+     wait until clk = '0';
      rst <= '0';
      wait;
   end process;

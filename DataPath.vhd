@@ -7,7 +7,7 @@ use work.EE224_Components.all;
 entity DataPath is
 	port (
 		mem_ad_a, mem_ad_b, alu1_a, alu1_b, alu1_c, alu2_a, alu2_b, alu2_c,
-        pc_a, pc_b, d1_a, a2_a, t1_a, t5_a, t6_a, a3_a, a3_b, d3_a, d3_b,
+        pc_a, pc_b, a2_a, t1_a, t5_a, t6_a, a3_a, a3_b, d3_a, d3_b,
                                                     mem_d_a, pad9_a: in std_logic;
 		c,z,z_temp,comp_temp: out std_logic;
         pcw, irw, memr, memw, rfw, t5e, t6e, t3e, c_en, z_en, z_temp_en, comp_temp_en,
@@ -145,7 +145,7 @@ begin
     -------------------------------------------------
     -- T5 related logic.
     -------------------------------------------------
-    t5mux2: MuxTwo port map (i0 => alu_out, i1 => edb_sig, s => t1_a, o => t5mux_out);
+    t5mux2: MuxTwo port map (i0 => alu_out, i1 => edb_sig, s => t5_a, o => t5mux_out);
     T5_enable <= t5e;
     T5_in <= t5mux_out;
     t5r: DataRegister
@@ -170,6 +170,7 @@ begin
     -------------------------------------------------
     instr_enable <= irw;
     instr_in <= edb_sig;
+    instr <= instr_data;
     ire: DataRegister
              generic map (data_width => 8)
              port map (
@@ -181,6 +182,7 @@ begin
     -------------------------------------------------
     c_enable <= c_en;
     c_in <= alu_c_out;
+    c <= c_data(0);
     cr: DataRegister
              generic map (data_width => 1)
              port map (
@@ -192,6 +194,7 @@ begin
     -------------------------------------------------
     z_enable <= z_en;
     z_in <= alu_z_out;
+    z <= z_data(0);
     zr: DataRegister
              generic map (data_width => 1)
              port map (
@@ -203,6 +206,7 @@ begin
     -------------------------------------------------
     comp_temp_enable <= comp_temp_en;
     comp_temp_in <= comp_out;
+    comp_temp <= comp_temp_data(0);
     comptemp: DataRegister
              generic map (data_width => 1)
              port map (
@@ -214,6 +218,7 @@ begin
     -------------------------------------------------
     z_temp_enable <= z_temp_en;
     z_temp_in <= zcomp_out;
+    z_temp <= z_temp_data(0);
     zerotemp: DataRegister
              generic map (data_width => 1)
              port map (
@@ -262,6 +267,7 @@ begin
     rfpc_in <= alu_out when rfpci_s = "00" else
                 T5_data when rfpci_s = "01" else
                 T2_data when rfpci_s = "10" else
+                const0_16 when rfpci_s = "11" else
                 alu_out;
 
     rfpcold <= T3_data;
