@@ -10,7 +10,7 @@ entity DataPath is
         pc_a, pc_b, a2_a, t1_a, t5_a, t6_a, a3_a, a3_b, d3_a, d3_b,
                                                     mem_d_a, pad9_a: in std_logic;
 		c,z,z_temp,comp_temp: out std_logic;
-        pcw, irw, memr, memw, rfw, t5e, t6e, t3e, c_en, z_en, z_temp_en, comp_temp_en,
+        pcw, irw, memr, memw, rfw, t5e, t6e, t3e,t1e, c_en, z_en, z_temp_en, comp_temp_en,
         alu_op,frce,flg: in std_logic;
         instr: out std_logic_vector (15 downto 0);
 		clk, rst: in std_logic
@@ -86,7 +86,7 @@ begin
     Mem_ad_sig <= Mem_ad_mux_out;
     Mem_dat_sig <= Mem_dat_mux_out;
     
-    mem_ad_s <= mem_ad_a & mem_ad_b;
+    mem_ad_s <= mem_ad_b & mem_ad_a;
 
     memadmux: MuxFour port map (i00 => rfpc_out, i01 => T4_data, i10 => T1_data,
                                 i11 => rfpc_out, s => mem_ad_s, o => Mem_ad_mux_out);
@@ -102,7 +102,7 @@ begin
     -- T1 related logic.
     -------------------------------------------------
     t1mux2: MuxTwo port map (i0 => rfd1, i1 => T4_data, s => t1_a, o => t1mux_out);
-    T1_enable <= '1';
+    T1_enable <= t1e;
     T1_in <= t1mux_out;
     t1r: DataRegister
              generic map (data_width => 16)
@@ -172,7 +172,7 @@ begin
     instr_in <= edb_sig;
     instr <= instr_data;
     ire: DataRegister
-             generic map (data_width => 8)
+             generic map (data_width => 16)
              port map (
 			 Din => instr_in, Dout => instr_data,
 				Enable => instr_enable, clk => clk);
@@ -180,8 +180,8 @@ begin
     -------------------------------------------------
     -- carry related logic.
     -------------------------------------------------
-    c_enable <= c_en;
-    c_in <= alu_c_out;
+    c_enable <= c_en or rst;
+    c_in <= "0" when rst = '1' else alu_c_out;
     c <= c_data(0);
     cr: DataRegister
              generic map (data_width => 1)
@@ -192,8 +192,8 @@ begin
     -------------------------------------------------
     -- zero related logic.
     -------------------------------------------------
-    z_enable <= z_en;
-    z_in <= alu_z_out;
+    z_enable <= z_en or rst;
+    z_in <= "0" when rst = '1' else alu_z_out;
     z <= z_data(0);
     zr: DataRegister
              generic map (data_width => 1)
@@ -204,8 +204,8 @@ begin
     -------------------------------------------------
     -- comp temp related logic.
     -------------------------------------------------
-    comp_temp_enable <= comp_temp_en;
-    comp_temp_in <= comp_out;
+    comp_temp_enable <= comp_temp_en or rst;
+    comp_temp_in <= "0" when rst = '1' else comp_out;
     comp_temp <= comp_temp_data(0);
     comptemp: DataRegister
              generic map (data_width => 1)
@@ -216,8 +216,8 @@ begin
     -------------------------------------------------
     -- zero temp related logic.
     -------------------------------------------------
-    z_temp_enable <= z_temp_en;
-    z_temp_in <= zcomp_out;
+    z_temp_enable <= z_temp_en or rst;
+    z_temp_in <= "0" when rst = '1' else zcomp_out;
     z_temp <= z_temp_data(0);
     zerotemp: DataRegister
              generic map (data_width => 1)
@@ -238,7 +238,7 @@ begin
 
     alu2mux8: MuxEight port map (i000 => const0_16, i001 => T2_data, i010 => e6_y,
                                 i011 => e9_y, i100 => const1_16, i101 => const0_16,
-                                i110 => const0_16, i111 => const0_16, s => alu1_s, o => alu1);
+                                i110 => const0_16, i111 => const0_16, s => alu2_s, o => alu2);
     abc: ALU port map (op => alu_op_sig, x => alu1, y => alu2,
                             s => alu_out, c_out => alu_c_out(0), z_out => alu_z_out(0));
 

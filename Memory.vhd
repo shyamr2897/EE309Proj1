@@ -14,20 +14,73 @@ end entity;
 
 architecture Behave of Memory is
     type arr is array(natural range <>) of std_logic_vector(7 downto 0);
-    signal mem_byte: arr(65535 downto 0);
+    signal mem_byte: arr(65535 downto 0) := (1 => "00110110", 0 => "01111111",
+                                            3 => "00111000", 2 => "00111111",
+                                            5 => "11000111", 4 => "00000100",
+                                            others => "00000000");
     signal ad_of_lsb, ad_of_msb : std_logic_vector (15 downto 0);
 begin
+    --------------------------------------------------------
+   -- mem_byte(0) <= "00110001";
+    -- mem_byte(1) <= "00101010";
+    --------------------------------------------------------
     ad_of_lsb <= Mem_ad(14 downto 0) & '0';
     ad_of_msb <= Mem_ad(14 downto 0) & '1';
 
     edb <= mem_byte(to_integer(unsigned(ad_of_msb))) &
-                        mem_byte(to_integer(unsigned(ad_of_lsb))) when Mem_read = '1' else
-            "1111111111111111";
+                        mem_byte(to_integer(unsigned(ad_of_lsb))) when Mem_read = '1' and
+                            (ad_of_msb(0) = '0' or ad_of_msb(0) = '1') and
+                            (ad_of_msb(1) = '0' or ad_of_msb(1) = '1') and
+                            (ad_of_msb(2) = '0' or ad_of_msb(2) = '1') and
+                            (ad_of_msb(3) = '0' or ad_of_msb(3) = '1') and
+                            (ad_of_msb(4) = '0' or ad_of_msb(4) = '1') and
+                            (ad_of_msb(5) = '0' or ad_of_msb(5) = '1') and
+                            (ad_of_msb(6) = '0' or ad_of_msb(6) = '1') and
+                            (ad_of_msb(7) = '0' or ad_of_msb(7) = '1') and
+                            (ad_of_lsb(0) = '0' or ad_of_lsb(0) = '1') and
+                            (ad_of_lsb(1) = '0' or ad_of_lsb(1) = '1') and
+                            (ad_of_lsb(2) = '0' or ad_of_lsb(2) = '1') and
+                            (ad_of_lsb(3) = '0' or ad_of_lsb(3) = '1') and
+                            (ad_of_lsb(4) = '0' or ad_of_lsb(4) = '1') and
+                            (ad_of_lsb(5) = '0' or ad_of_lsb(5) = '1') and
+                            (ad_of_lsb(6) = '0' or ad_of_lsb(6) = '1') and
+                            (ad_of_lsb(7) = '0' or ad_of_lsb(7) = '1')
+                            else "1111111111111111";
+
+   -- edb <= "0011000100101010" when Mem_read = '1' else        --LHI
+   --         "1111111111111111";
+   -- edb <= "0000000001000010" when Mem_read = '1' else
+   --         "1111111111111111";                                 --ADD
+   -- edb <= "1100010000011011" when Mem_read = '1' else
+   --         "1111111111111111";                                 --BEQ
+   --edb <= "1000100011110101" when Mem_read = '1' else
+   --         "1111111111111111";                                 --JAL
+   -- edb <= "1001101101000000" when Mem_read = '1' else
+   --         "1111111111111111";                                 --JLR
+   --edb <= "0100110011110011" when Mem_read = '1' else
+   --         "1111111111111111";                                 --LW
+   -- edb <= "0110011000011001" when Mem_read = '1' else
+   --         "1111111111111111";                                 --LM
             
     process(clk)
     begin
         if(clk'event and (clk  = '1')) then
-            if(Mem_write = '1') then
+            if(Mem_write = '1' and (ad_of_msb(0) = '0' or ad_of_msb(0) = '1') and
+                            (ad_of_msb(1) = '0' or ad_of_msb(1) = '1') and
+                            (ad_of_msb(2) = '0' or ad_of_msb(2) = '1') and
+                            (ad_of_msb(3) = '0' or ad_of_msb(3) = '1') and
+                            (ad_of_msb(4) = '0' or ad_of_msb(4) = '1') and
+                            (ad_of_msb(5) = '0' or ad_of_msb(5) = '1') and
+                            (ad_of_msb(6) = '0' or ad_of_msb(6) = '1') and
+                            (ad_of_msb(7) = '0' or ad_of_msb(7) = '1') and
+                            (ad_of_lsb(0) = '0' or ad_of_lsb(0) = '1') and
+                            (ad_of_lsb(1) = '0' or ad_of_lsb(1) = '1') and
+                            (ad_of_lsb(2) = '0' or ad_of_lsb(2) = '1') and
+                            (ad_of_lsb(3) = '0' or ad_of_lsb(3) = '1') and
+                            (ad_of_lsb(4) = '0' or ad_of_lsb(4) = '1') and
+                            (ad_of_lsb(5) = '0' or ad_of_lsb(5) = '1') and
+                            (ad_of_lsb(6) = '0' or ad_of_lsb(6) = '1') and
+                            (ad_of_lsb(7) = '0' or ad_of_lsb(7) = '1')) then
                 mem_byte(to_integer(unsigned(ad_of_lsb))) <= Mem_dat(7 downto 0);
                 mem_byte(to_integer(unsigned(ad_of_msb))) <= Mem_dat(15 downto 8);
             end if;

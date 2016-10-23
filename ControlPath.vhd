@@ -10,7 +10,7 @@ entity ControlPath is
         pc_a, pc_b, a2_a, t1_a, t5_a, t6_a, a3_a, a3_b, d3_a, d3_b,
                                                     mem_d_a, pad9_a: out std_logic;
 		c,z,z_temp,comp_temp: in std_logic;
-        pcw, irw, memr, memw, rfw, t5e, t6e, t3e, c_en, z_en, z_temp_en, comp_temp_en,
+        pcw, irw, memr, memw, rfw, t5e, t6e, t3e,t1e, c_en, z_en, z_temp_en, comp_temp_en,
         alu_op, flg, frce: out std_logic;
         instr: in std_logic_vector (15 downto 0);
 		clk, rst: in std_logic
@@ -28,7 +28,7 @@ begin
       x_alu2_c,
         x_pc_a, x_pc_b, x_a2_a, x_t1_a, x_t5_a, x_t6_a, x_a3_a, x_a3_b, x_d3_a, x_d3_b,
                     x_mem_d_a, x_pad9_a: std_logic;
-        variable x_pcw, x_irw, x_memr, x_memw, x_rfw, x_t5e, x_t6e, x_t3e, x_c_en, x_z_en,
+        variable x_pcw, x_irw, x_memr, x_memw, x_rfw, x_t5e, x_t6e, x_t3e,x_t1e,x_c_en, x_z_en,
         x_z_temp_en, x_comp_temp_en, x_alu_op, x_flg, x_frce: std_logic;
 
    begin
@@ -42,7 +42,8 @@ begin
                     x_mem_d_a:= '0'; x_pad9_a := '0';
 
         x_pcw:= '0'; x_irw := '0';x_memr:= '0'; x_memw:= '0'; x_rfw:= '0';
-        x_t5e:= '0'; x_t6e:= '0'; x_t3e:= '0'; x_c_en:= '0'; x_z_en:= '0'; x_z_temp_en:= '0';
+        x_t5e:= '0'; x_t6e:= '0'; x_t3e:= '0'; x_t1e := '0'; x_c_en:= '0'; x_z_en:= '0';
+        x_z_temp_en:= '0';
         x_comp_temp_en:= '0'; x_alu_op:= '0'; x_flg := '0'; x_frce := '0';
 
        case fsm_state is 
@@ -74,6 +75,8 @@ begin
                 
           when S2 =>
                 x_t1_a := '0';   -- D1 -> T1
+                x_t1e := '1';    -- T1_enable = 1
+
                 x_a2_a := '0';      -- I8-6 ->A2
 
                 x_alu1_c:= '0';
@@ -144,6 +147,14 @@ begin
           when S3 =>
                 next_state := S4;
 
+                x_alu2_c := '0';
+                x_alu2_b := '0';
+                x_alu2_a := '1';  -- T2 -> alu2
+
+                x_alu1_c := '0';
+                x_alu1_b := '1';
+                x_alu1_a := '0';  -- T1 -> alu1
+
                 x_alu_op := instr(13);
                 x_z_en := '1';
                 if(instr(13) = '1') then
@@ -170,6 +181,7 @@ begin
             x_alu2_a := '0';  -- SE6 -> alu2
 
             x_t1_a := '0';   -- D1->t1
+            x_t1e := '1';    -- T1_enable = 1
 
             x_alu_op := '0';       --add
 
@@ -311,6 +323,7 @@ begin
             end if;
 
             x_t1_a := '1'; --t4 -> t1
+            x_t1e := '1';  -- t1_enable = 1
 
             x_t6_a := '1';  --t6new->t6
             x_t6e := '1';
@@ -335,14 +348,14 @@ begin
      end case;
 
     mem_ad_a <= x_mem_ad_a; mem_ad_b <= x_mem_ad_b; alu1_a <= x_alu1_a; alu1_b <= x_alu1_b;
-    alu1_c <= x_alu1_c;
+    alu1_c <= x_alu1_c; irw <= x_irw;
     alu2_a <= x_alu2_a; alu2_b <= x_alu2_b; alu2_c <= x_alu2_c; pc_a <= x_pc_a;
      pc_b <= x_pc_b; a2_a <= x_a2_a; t1_a <= x_t1_a; t5_a <= x_t5_a; t6_a <= x_t6_a;
      a3_a <= x_a3_a;
     a3_b <= x_a3_b; d3_a <= x_d3_a; d3_b <= x_d3_b; mem_d_a <= x_mem_d_a; pad9_a <= x_pad9_a;
 
     pcw <= x_pcw; memr <= x_memr; memw <= x_memw; rfw <= x_rfw; t5e <= x_t5e; t6e <= x_t6e;
-    t3e <= x_t3e; c_en <= x_c_en; z_en <= x_z_en; z_temp_en <= x_z_temp_en;
+    t3e <= x_t3e; t1e <= x_t1e; c_en <= x_c_en; z_en <= x_z_en; z_temp_en <= x_z_temp_en;
          comp_temp_en <= x_comp_temp_en; alu_op <= x_alu_op; flg <= x_flg; frce <= x_frce;
   
      if(clk'event and (clk = '1')) then
