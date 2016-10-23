@@ -22,7 +22,7 @@ architecture Behave of ControlPath is
    signal fsm_state : FsmState;
 begin
 
-   process(fsm_state, c,z,z_temp,comp_temp,instr, clk, rst)
+   process(fsm_state, c,z,z_temp,comp_temp,rfcomp,instr, clk, rst)
       variable next_state: FsmState;
       variable x_mem_ad_a, x_mem_ad_b, x_alu1_a, x_alu1_b, x_alu1_c, x_alu2_a, x_alu2_b,
       x_alu2_c,
