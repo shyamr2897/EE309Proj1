@@ -176,7 +176,7 @@ package EE224_Components is
 		mem_ad_a, mem_ad_b, alu1_a, alu1_b, alu1_c, alu2_a, alu2_b, alu2_c,
         pc_a, pc_b, a2_a, t1_a, t5_a, t6_a, a3_a, a3_b, d3_a, d3_b,
                                                     mem_d_a, pad9_a: out std_logic;
-		c,z,z_temp,comp_temp: in std_logic;
+		c,z,z_temp,comp_temp,rfcomp: in std_logic;
         pcw, irw, memr, memw, rfw, t5e, t6e, t3e, t1e, c_en, z_en, z_temp_en, comp_temp_en,
         alu_op, flg, frce: out std_logic;
         instr: in std_logic_vector (15 downto 0);
@@ -189,7 +189,7 @@ package EE224_Components is
             mem_ad_a, mem_ad_b, alu1_a, alu1_b, alu1_c, alu2_a, alu2_b, alu2_c,
             pc_a, pc_b, a2_a, t1_a, t5_a, t6_a, a3_a, a3_b, d3_a, d3_b,
                                                         mem_d_a, pad9_a: in std_logic;
-            c,z,z_temp,comp_temp: out std_logic;
+            c,z,z_temp,comp_temp,rfcomp: out std_logic;
             pcw, irw, memr, memw, rfw, t5e, t6e, t3e, t1e, c_en, z_en, z_temp_en, comp_temp_en,
             alu_op,frce,flg: in std_logic;
             instr: out std_logic_vector (15 downto 0);
@@ -207,6 +207,7 @@ package EE224_Components is
             A1,A2,A3: in std_logic_vector (2 downto 0);
             D3,PC_in, PC_old: in std_logic_vector(15 downto 0);
             D1,D2,PC_out: out std_logic_vector(15 downto 0);
+            RF_comp: out std_logic;
             rst, clk: in std_logic);
     end component;
 

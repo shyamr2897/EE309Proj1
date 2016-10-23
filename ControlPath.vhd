@@ -9,7 +9,7 @@ entity ControlPath is
 		mem_ad_a, mem_ad_b, alu1_a, alu1_b, alu1_c, alu2_a, alu2_b, alu2_c,
         pc_a, pc_b, a2_a, t1_a, t5_a, t6_a, a3_a, a3_b, d3_a, d3_b,
                                                     mem_d_a, pad9_a: out std_logic;
-		c,z,z_temp,comp_temp: in std_logic;
+		c,z,z_temp,comp_temp,rfcomp: in std_logic;
         pcw, irw, memr, memw, rfw, t5e, t6e, t3e,t1e, c_en, z_en, z_temp_en, comp_temp_en,
         alu_op, flg, frce: out std_logic;
         instr: in std_logic_vector (15 downto 0);
@@ -70,8 +70,31 @@ begin
                 x_memr := '1';
 
             when S1 =>
-                next_state := S0;
                 x_flg := '1';
+                if(rfcomp = '1') then
+                    next_state := S2;
+                   x_mem_ad_a := '0';
+                   x_mem_ad_b := '0';   --PC -> mem_ad
+
+                   x_alu1_c:= '0';
+                    x_alu1_b := '0';
+                    x_alu1_a := '0';    --PC -> alu1
+
+                    x_alu2_c := '1';
+                    x_alu2_b := '0';
+                    x_alu2_a := '0';    -- +1 -> alu2
+
+                    x_pc_b := '0';
+                    x_pc_a := '0';      -- alu -> PC
+
+                    x_t3e := '1';       --t3enable = 1
+
+                    x_pcw := '1';
+                    x_irw := '1';
+                    x_memr := '1';
+                else
+                    next_state := S0;
+                end if;
                 
           when S2 =>
                 x_t1_a := '0';   -- D1 -> T1
@@ -187,6 +210,9 @@ begin
 
             if (instr(15 downto 12) = "0001" ) then             --ADI
                 next_state := S6;
+
+                x_c_en := '1';
+                x_z_en := '1';           -- carry and zero enabled
 
                 x_alu1_c:= '0';
                 x_alu1_b := '1';

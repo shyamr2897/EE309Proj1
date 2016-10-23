@@ -14,9 +14,9 @@ end entity;
 
 architecture Behave of Memory is
     type arr is array(natural range <>) of std_logic_vector(7 downto 0);
-    signal mem_byte: arr(65535 downto 0) := (1 => "00110110", 0 => "01111111",
-                                            3 => "00111000", 2 => "00111111",
-                                            5 => "11000111", 4 => "00000100",
+    signal mem_byte: arr(65535 downto 0) := (1 => "00010101", 0 => "00111111",
+                                            3 => "00111000", 2 => "01111111",
+                                            5 => "11000111", 4 => "00111111",
                                             others => "00000000");
     signal ad_of_lsb, ad_of_msb : std_logic_vector (15 downto 0);
 begin

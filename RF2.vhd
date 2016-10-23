@@ -9,6 +9,7 @@ entity RF2 is
         A1,A2,A3: in std_logic_vector (2 downto 0);
         D3,PC_in, PC_old: in std_logic_vector(15 downto 0);
         D1,D2,PC_out: out std_logic_vector(15 downto 0);
+        RF_comp: out std_logic;
         rst, clk: in std_logic);
 end entity;
 
@@ -20,6 +21,7 @@ architecture Struct of RF2 is
     signal comp,pc_en : std_logic;
 
 begin
+    RF_comp <= comp;
     comp <= '1' when PC_old = R_out(7) else '0';
 
     --Read related logic
@@ -143,7 +145,7 @@ begin
     ----------------------
     PC_out <= PC_out_sig;
     PC_in_sig <= "0000000000000000" when rst = '1' else
-                R_out(7) when flag = '1' else
+                R_out(7) when (flag = '1' and comp = '0') else
                 PC_in;
     pc_en <= PC_write or (flag and not comp) or force or rst;
     PC: DataRegister

@@ -9,7 +9,7 @@ entity DataPath is
 		mem_ad_a, mem_ad_b, alu1_a, alu1_b, alu1_c, alu2_a, alu2_b, alu2_c,
         pc_a, pc_b, a2_a, t1_a, t5_a, t6_a, a3_a, a3_b, d3_a, d3_b,
                                                     mem_d_a, pad9_a: in std_logic;
-		c,z,z_temp,comp_temp: out std_logic;
+		c,z,z_temp,comp_temp,rfcomp: out std_logic;
         pcw, irw, memr, memw, rfw, t5e, t6e, t3e,t1e, c_en, z_en, z_temp_en, comp_temp_en,
         alu_op,frce,flg: in std_logic;
         instr: out std_logic_vector (15 downto 0);
@@ -274,7 +274,8 @@ begin
 
     rf: RF2 port map(RF_write => rfw, PC_write => pcw, A1 => rfa1, A2 => rfa2, A3 => rfa3,
                     D3 => rfd3, PC_in => rfpc_in, d1 => rfd1, d2 => rfd2, PC_out => rfpc_out,
-                     flag => flg, force => frce, PC_old =>rfpcold, rst => rst, clk => clk);
+                     flag => flg, force => frce, PC_old =>rfpcold,
+                     RF_comp => rfcomp, rst => rst, clk => clk);
 
 
     -------------------------------------------------
