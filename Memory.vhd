@@ -4,6 +4,7 @@ use ieee.numeric_std.all;
 
 library work;
 use work.EE224_Components.all;
+use work.mem_package.all;
 
 entity Memory is
     port(Mem_write, Mem_read: in std_logic;
@@ -13,11 +14,8 @@ entity Memory is
 end entity;
 
 architecture Behave of Memory is
-    type arr is array(natural range <>) of std_logic_vector(7 downto 0);
-    signal mem_byte: arr(65535 downto 0) := (1 => "00010101", 0 => "00111111",
-                                            3 => "00111000", 2 => "01111111",
-                                            5 => "11000111", 4 => "00111111",
-                                            others => "00000000");
+    
+    signal mem_byte: arr := MEM_INIT;
     signal ad_of_lsb, ad_of_msb : std_logic_vector (15 downto 0);
 begin
     --------------------------------------------------------

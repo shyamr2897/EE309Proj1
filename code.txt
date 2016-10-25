@@ -1,0 +1,16 @@
+lhi r1,0b010101011
+lhi r2,0b101010100
+add r3,r2,r1
+ndz r1,r2,r3
+adi r4,r3,0b000010
+adc r3,r2,r1
+ndu r5,r3,r4
+lhi r6,0b111111111
+ndu r5,r5,r6
+adz r1,r3,r4
+ndc r2,r5,r3
+beq r2,r3,0b000010
+lhi r7,0b000000010
+lhi r6,0b011111111
+lhi r4,0b011111111
+ndz r1,r6,r4
